@@ -1,0 +1,9 @@
+---
+model: googleai/gemini-2.5-flash
+tools: [listUsersRepos]
+input:
+    schema:
+        message: string
+output: string
+---
+Please answer the users {{message}} message. 

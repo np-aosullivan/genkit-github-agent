@@ -1,6 +1,6 @@
 ---
 model: googleai/gemini-2.5-flash
-tools: [listUsersRepos]
+tools: [listUsersRepos, createRepo]
 input:
     schema:
         message: string

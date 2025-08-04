@@ -1,6 +1,10 @@
 # GitHub Genkit Agent
 
-This is a sample project demonstrating how to build a simple AI agent using [Genkit](https://firebase.google.com/docs/genkit). The agent connects to the GitHub API to retrieve information about a user's repositories based on natural language prompts.
+This is project demonstrating a simple AI agent using [Genkit](https://firebase.google.com/docs/genkit). The agent connects to the GitHub API to complete GitHub related queries given by the user. This model also uses Genkit's Chat API to support a conversational style of interaction. 
+
+Currently this agent can:
+- List your repositories
+- Create a new repository
 
 ## Features
 
@@ -26,7 +30,9 @@ You will also need:
 3.  Give your token a name.
 4.  For **Repository** access, choose **All Repositories**.
 5.  Under **Permissions**, make sure the **Repositoreies** header is selected and click **Add Permissions**. 
-6.  Select the **Actions** permission, this is required to allow the agent to access your private and public repositories.
+6.  Add the following permissions:
+    - **Actions** Read only access
+    - **Administration** Read and write access
 7.  Click **Generate** and copy the token. You will not be able to see it again.
 
 ### Creating a Gemini API Key

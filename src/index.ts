@@ -1,61 +1,10 @@
 import 'dotenv/config'
 
-import { googleAI } from '@genkit-ai/googleai';
 import { createMcpServer } from '@genkit-ai/mcp';
-import { genkit } from 'genkit/beta';
 import { z } from 'zod';
-import axios from 'axios';
-
-const ai = genkit({
-    plugins: [
-        googleAI(),
-    ],
-    model: googleAI.model('gemini-2.5-flash')
-})
-
-const githubClient = axios.create({
-  baseURL: 'https://api.github.com',
-  headers: {
-    'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
-    'Accept': 'application/json',
-  },
-});
-
-const listUsersRepos = ai.defineTool(
-    {
-        name: 'listUsersRepos',
-        description: 'Lists the names of the authenticated user\'s Github repositories.',
-        outputSchema: z.array(z.string()),
-    },
-    async () => {
-        try {
-            const response = await githubClient.get('/user/repos');
-            return response.data.map((repo: { name: string }) => repo.name);
-        } catch (error) {
-            console.error('Error fetching from Github API:', error);
-            // Re-throw the error to let the flow handle it.
-            throw error;
-        }
-    }
-);
-
-const createRepo = ai.defineTool(
-    {
-        name: 'createRepo',
-        description: 'Creates a new Github repository with the given name.',
-        inputSchema: z.object({name: z.string()}),
-        outputSchema: z.string(),
-    },
-    async ({ name }) => {
-        try {
-            const response = await githubClient.post('/user/repos', { name });
-            return 'Repository created with name ' + name;
-        } catch (error) {
-            console.error('Error creating repository:', error);
-            throw error;
-        }
-    }
-)
+import { googleAI } from '@genkit-ai/googleai';
+import { ai } from './ai';
+import { listUsersRepos, createRepo } from './github';
 
 export const mainFlow = ai.defineFlow({
     name: 'mainFlow',
@@ -90,7 +39,7 @@ async function run() {
         system: "You are a helpful GitHub assistant. You can list and create repositories. When asked to create a repository, if a name is not provided, ask for one."
     });
 
-    let response = await chat.send("Can you list my repositories");
+    let response = await chat.send("Can you create a repository for me?");
     console.log("Agent: ", response.text);
 }
 

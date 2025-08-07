@@ -1,6 +1,5 @@
 import 'dotenv/config'
 
-import { createMcpServer } from '@genkit-ai/mcp';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/googleai';
 import { ai } from './ai';
@@ -30,31 +29,20 @@ export const mainFlow = ai.defineFlow({
         return response.text;
     })
 
-const githubServer = createMcpServer(ai, {
-    name: 'github-mcp-server',
-})
-
-async function startServer() {
-    await githubServer.setup();
-    githubServer.start();
-}
-
-startServer();
-
 // The following `run` function is a demonstration of a self-contained conversation.
 // If you want to run it as a standalone script, you can comment out the
 // `githubServer` startup code above and uncomment the code below.
 //
-import { createInterface } from 'node:readline/promises';
+// import { createInterface } from 'node:readline/promises';
 
-async function run() {
-    const chat = ai.chat(chatConfig);
-     const readline = createInterface(process.stdin, process.stdout);
+// async function run() {
+//     const chat = ai.chat(chatConfig);
+//      const readline = createInterface(process.stdin, process.stdout);
      
-    while (true) {
-    const userInput = await readline.question("You: ");
-    const response = await chat.send(userInput);
-    console.log(response.text);
-    }
-}
-run();
+//     while (true) {
+//     const userInput = await readline.question("You: ");
+//     const response = await chat.send(userInput);
+//     console.log(response.text);
+//     }
+// }
+// run();

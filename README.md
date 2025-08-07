@@ -85,10 +85,10 @@ There are two primary ways to run and interact with this agent.
 
 The `src/index.ts` file includes a `run()` function that executes the `mainFlow` with a sample prompt. This is useful for quick testing from the command line.
 
-You can execute it using `ts-node`:
+You can execute it using `npm start`:
 
 ```bash
-npx ts-node src/index.ts
+npm start
 ```
 
 The script will call the flow with the message "Please get the names of all my github repositories" and print the AI's response to the console.

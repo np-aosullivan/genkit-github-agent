@@ -3,11 +3,11 @@ import 'dotenv/config'
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/googleai';
 import { ai } from './ai';
-import { listUsersRepos, createRepo } from './github';
+import { listUsersRepos, createRepo, deleteRepo } from './github';
 
 const chatConfig = {
         model: googleAI.model('gemini-2.5-flash'),
-        tools: [listUsersRepos, createRepo],
+        tools: [listUsersRepos, createRepo, deleteRepo],
         system: `You are a helpful and friendly GitHub assistant. 
             
         Your abilities include:

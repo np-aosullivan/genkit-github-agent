@@ -11,6 +11,7 @@ const githubClient = axios.create({
   },
 });
 
+
 export const listUsersRepos = ai.defineTool(
     {
         name: 'listUsersRepos',
@@ -41,7 +42,28 @@ export const createRepo = ai.defineTool(
             const response = await githubClient.post('/user/repos', { name });
             return 'Repository created with name ' + response.data.name;
         } catch (error) {
+
             console.error('Error creating repository:', error);
+            throw error;
+        }
+    }
+)
+
+export const deleteRepo = ai.defineTool(
+    {
+        name: 'deleteRepo',
+        description: 'Deletes a Github repository with the given name.',
+        inputSchema: z.object({name: z.string()}),
+        outputSchema: z.string(),
+    },
+    async ({ name }) => {
+        try {
+            const response = await githubClient.get('/user');
+            const owner = response.data.login;
+            await githubClient.delete(`/repos/${owner}/${name}`);
+            return `Repository ${name} deleted.`;
+        } catch (error) {
+            console.error('Error deleting repository:', error);
             throw error;
         }
     }

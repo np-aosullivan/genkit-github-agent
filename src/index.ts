@@ -1,22 +1,9 @@
 import 'dotenv/config'
 
 import { z } from 'zod';
-import { googleAI } from '@genkit-ai/googleai';
 import { ai } from './ai';
 import { listUsersRepos, createRepo, deleteRepo } from './github';
 
-const chatConfig = {
-        model: googleAI.model('gemini-2.5-flash'),
-        tools: [listUsersRepos, createRepo, deleteRepo],
-        system: `You are a helpful and friendly GitHub assistant. 
-            
-        Your abilities include:
-        - Listing repositories
-        - Creating new repositories
-
-        If you cannot help the user with their query, just explain to them what you are able to do for them.
-    `,
-}
 
 export const mainFlow = ai.defineFlow({
     name: 'mainFlow',
@@ -24,9 +11,21 @@ export const mainFlow = ai.defineFlow({
     outputSchema: z.string(),
 },
     async ({ message }) => {
-        const chat = ai.chat(chatConfig);
-        const response = await chat.send(message);
-        return response.text;
+        const response = await ai.generate({
+            tools: [listUsersRepos, createRepo, deleteRepo],
+            prompt: `You are a helpful and friendly GitHub assistant. Please assist the user with their GitHub-related queries.
+            Answer the user's ${message} message.
+            
+            Your abilities include:
+            - Listing repositories
+            - Creating new repositories
+            - Deleting repositories
+
+            If you cannot help the user with their query, just explain to them what you are able to do for them.
+        `,
+        })
+        
+        return response.text
     })
 
 // The following `run` function is a demonstration of a self-contained conversation.
